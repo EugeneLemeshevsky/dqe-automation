@@ -11,12 +11,13 @@ import pytest
 def source_data(db_connection):
     source_query = """
         SELECT
-            facility_name,
-            visit_date,
-            MIN(time_spent) AS min_time_spent
-        FROM visits
-        GROUP BY facility_name, visit_date
-        ORDER BY facility_name, visit_date
+            f.facility_name,
+            v.visit_timestamp::date AS visit_date,
+            MIN(v.duration_minutes) AS min_time_spent
+        FROM visits v
+        JOIN facilities f ON v.facility_id = f.id
+        GROUP BY f.facility_name, v.visit_timestamp::date
+        ORDER BY f.facility_name, v.visit_timestamp::date
     """
     source_data = db_connection.get_data_sql(source_query)
     return source_data
