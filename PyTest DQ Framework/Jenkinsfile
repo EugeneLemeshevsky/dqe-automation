@@ -15,13 +15,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r "PyTest DQ Framework/requirements.txt"
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh """
+                sh '''
+                    . venv/bin/activate
+                    cd "PyTest DQ Framework"
                     pytest tests -m "parquet_data" \
                         --db_host="postgres" \
                         --db_port="5432" \
@@ -29,18 +35,18 @@ pipeline {
                         --db_user=$POSTGRES_SECRET_USR \
                         --db_password=$POSTGRES_SECRET_PSW \
                         --html=html_report/report.html
-                """
+                '''
             }
         }
 
         stage('Archive Test Report') {
             steps {
-                archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
 
                 publishHTML(target: [
                     allowMissing: false,
                     keepAll: true,
-                    reportDir: 'html_report',
+                    reportDir: 'PyTest DQ Framework/html_report',
                     reportFiles: 'report.html',
                     reportName: 'HTML Test Report'
                 ])
