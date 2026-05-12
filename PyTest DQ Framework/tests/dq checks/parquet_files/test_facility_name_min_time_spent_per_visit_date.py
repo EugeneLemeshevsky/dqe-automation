@@ -24,8 +24,9 @@ def source_data(db_connection):
 
 
 @pytest.fixture(scope='module')
-def target_data(parquet_reader):
-    target_path = '/parquet_data/facility_name_min_time_spent_per_visit_date'
+def target_data(parquet_reader, request):
+    base_path = request.config.getoption("--parquet_path")
+    target_path = f'{base_path}/facility_name_min_time_spent_per_visit_date'
     target_data = parquet_reader.process(target_path, include_subfolders=True)
     return target_data
 

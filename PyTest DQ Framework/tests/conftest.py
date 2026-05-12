@@ -9,6 +9,7 @@ def pytest_addoption(parser):
     parser.addoption("--db_name", action="store", default=None, help="Database name")
     parser.addoption("--db_user", action="store", default=None, help="Database user")
     parser.addoption("--db_password", action="store", default=None, help="Database password")
+    parser.addoption("--parquet_path", action="store", default="/parquet_data", help="Base path to parquet data")
 
 def pytest_configure(config):
     """

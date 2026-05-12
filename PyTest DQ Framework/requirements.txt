@@ -3,3 +3,4 @@ pytest-html==4.1.1
 psycopg2-binary==2.9.10
 pandas==2.2.3
 pyarrow==21.0.0
+pytest-reportportal==5.4.1
